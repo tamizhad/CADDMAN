@@ -1,0 +1,70 @@
+html, body {
+    height: 100%;
+}
+
+.left-panel {
+    background-color: rgb(21 74 136);
+    color: white;
+}
+
+.left-panel-inner-div{
+    padding-top: 15%;
+    padding-left: 10%;
+}
+
+.company-name{
+    padding-left: 2%;
+}
+
+.logo img{
+    max-width: 25%;
+    max-height: 25%;
+}
+
+.main-heading{
+    padding-bottom: 1%;
+    border-bottom: 1px solid #dddddd;
+}
+
+.add-client{
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 92.5%;
+}
+
+table{
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+th{
+    padding-bottom: 1% !important;
+}
+
+td{
+    padding-top: 1% !important;
+    padding-bottom: 1% !important;
+}
+
+.main-panel{
+    padding-left: 1%;
+}
+
+.client-list{
+    max-width: 100%;
+}
+
+#add-client-btn{
+    background-color: rgb(0 66 241) !important;
+    color: white;
+}
+  
+.fill {
+    min-height: 100% !important;
+}
+
+.bottom-align{
+    border-top: 1px solid white;
+    position: absolute;
+    top: 88%;
+}
