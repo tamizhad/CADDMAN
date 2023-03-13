@@ -1,4 +1,51 @@
-<html>
-    <head></head>
-    <body>Login</body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="lib5.0/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="lib5.0/bootstrap.min.js"></script>
+</head>
+
+<body id="login">
+
+    <div class="notification">
+        <div class="notification__message message--info">
+            <h1>Info</h1>
+            <p></p>
+            <button class="button-dismiss" aria-labelledby="button-dismiss">
+                <span id="button-dismiss" hidden>Dismiss</span>
+                <span id="close-btn">x</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="heading text-center">Sign In</div>
+        <div class="text-center" style="padding-bottom: 8%; font-size: 1.1em;">Sign In as Admin or Staff credential</div>
+        <div class="form-outline mb-4">
+            <input type="username" id="username" class="form-control" placeholder="Username or Email"/>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="password" class="form-control" placeholder="Password"/>
+        </div>
+        <div class="error text-center" style="padding-bottom: 5%;">
+            <span>Username or Password is incorrect!</span>
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn text-center" id="login-btn">Login</button>
+        </div>
+
+    </div>
+
+    <script src="js/eventHandler.js"></script>
+    
+</body>
+
 </html>

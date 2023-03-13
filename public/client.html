@@ -5,17 +5,17 @@
     <title>Client List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="page.css">
-    <link rel="stylesheet" href="libs/bootstrap.min.css">
-    <script src="libs/jquery.min.js"></script>
-    <script src="libs/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="lib3.0/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="lib3.0/bootstrap.min.js"></script>
 </head>
-
+    
 <body>
     <div class="col-sm-2 left-panel fill">
         <div class="left-panel-inner-div">
             <div class="row">
-                <span class="logo"><img src="logo.png"></span>
+                <span class="logo"><img src="images/logo.png"></span>
                 <span class="company-name font-weight-bold">CADMANN ENGG</span>
             </div>
 
@@ -34,9 +34,9 @@
                 <button type="button" class="btn" id="add-client-btn">+ Add Client</button>
             </div>
             <div class="row client-list table-responsive">
-                <table class="table table-hover table-condensed">
+                <table class="table table-hover table-condensed" id="client-list">
                     <thead>
-                        <tr>
+                        <tr id="client-heading">
                             <th class="text-nowrap">S. No</th>
                             <th class="text-nowrap">Client ID</th>
                             <th>Client Name</th>
@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr id="client-list-1">
                             <td>1</td>
                             <td>00001</td>
                             <td>COUNTY FABRICATORS</td>
@@ -68,22 +68,6 @@
                             <td>Select-sales</td>
                             <td>Closed</td>
                             <td class="text-nowrap">26-Feb-2023</td>
-                            <td>Mary</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>00002</td>
-                            <td>COUNTY FABRICATORS</td>
-                            <td>Laura Zapata, Alexande De La Cruz</span></td>
-                            <td>Estimating/Project Manager</td>
-                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
-                            <td>lzapata@countyfabricators.com</td>
-                            <td>https://www.countyfabricators.com</td>
-                            <td class="text-nowrap">175 Marble Ave, Pleasant ville, NY 10570, United States</td>
-                            <td>Pleasantvile, Newyork</td>
-                            <td>Select-sales</td>
-                            <td>Closed</td>
-                            <td>26-Feb-2023</td>
                             <td>Mary</td>
                         </tr>
                     </tbody>
