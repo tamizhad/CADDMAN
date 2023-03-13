@@ -1,0 +1,27 @@
+{
+ "name": "CADDMANN",
+ "version": "1.5.0",
+ "description": "Express server project",
+ "main": "./index.js",
+ "scripts": {
+  "start": "node index.js"
+ },
+ "dependencies": {
+  "cheerio": "^1.0.0-rc.12",
+  "dotenv": "^16.0.3",
+  "express": "^4.18.2",
+  "mysql": "^2.18.1",
+  "path": "^0.12.7"
+ },
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/osiolabs/example.git"
+ },
+ "author": "Tamil Selvan",
+ "contributors": [
+  {
+   "name": "Tamil Selvan",
+   "email": "tamizhad@gmail.com"
+  }
+ ]
+}

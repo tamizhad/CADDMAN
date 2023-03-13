@@ -1,0 +1,277 @@
+html, body {
+    height: 100%;
+}
+
+.left-panel {
+    background-color: rgb(21 74 136);
+    color: white;
+}
+
+.left-panel-inner-div{
+    padding-top: 15%;
+    padding-left: 10%;
+}
+
+.company-name{
+    padding-left: 2%;
+}
+
+.logo img{
+    max-width: 25%;
+    max-height: 25%;
+}
+
+.main-heading{
+    padding-bottom: 1%;
+    border-bottom: 1px solid #dddddd;
+}
+
+.add-client{
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 92.5%;
+}
+
+table{
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+th{
+    padding-bottom: 1% !important;
+}
+
+td{
+    padding-top: 1% !important;
+    padding-bottom: 1% !important;
+}
+
+.main-panel{
+    padding-left: 1%;
+}
+
+.client-list{
+    max-width: 100%;
+}
+
+#add-client-btn{
+    background-color: rgb(0 66 241) !important;
+    color: white;
+}
+  
+.fill {
+    min-height: 100% !important;
+}
+
+.bottom-align{
+    border-top: 1px solid white;
+    position: absolute;
+    top: 88%;
+    width: 82%;
+}
+
+#login {
+    background-image: url('file:///Users/temp-tamil/Git/CADDMAN/public/images/login_bg.png');
+    background-repeat: no-repeat;
+    background-color: #154a88;
+    background-size: 100% 100%;
+}
+
+#login .container{
+    font-family: unset;
+    color: white;
+    width: 20%;
+    height: 50%;
+    top: 20%;
+    position: relative;
+}
+
+#login .heading{    
+    font-size: 3.7em;
+    padding-bottom: 10%;
+}
+
+#login #username, #login #password{
+    background-color: rgb(63 168 255);
+    border: 1px solid rgb(63 168 255);
+    color: white;
+
+}
+
+#login #username::placeholder, #login #password::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+}
+
+#login #username:-ms-input-placeholder,  #login #password:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#login #username::-ms-input-placeholder, #login #password::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+}
+
+#login-btn{
+    color: white;
+    border: 1px solid white;
+    width: 40%;
+}
+
+#login-btn:hover{
+    background-color: rgb(34 223 127);;
+    color: white;
+}
+
+.error {
+    color: red;
+}
+
+
+/* Notification css starts */
+
+.notification {
+    position: fixed;
+    top: 0.5rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: hsl(0, 0%, 20%);
+    /* hide the overflow to conceal the message when translated to the right of the container */
+    overflow-x: hidden;
+    /* padding to avoid cropping the box-shadow on the message */
+    padding: 0.25rem;
+    min-width: 25%;
+}
+
+.notification *{
+    padding: 0;
+    margin: 0;
+}
+
+/* ! for both elements the rotation occurs using the parent group element as a hinge, allowing for the pendulum-like swing */
+@keyframes swingBody {
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+/* animation for the clapper, following the main body and with a larger rotation */
+@keyframes swingClapper {
+    5% {
+        transform: rotate(0deg);
+    }
+    30% {
+        transform: rotate(-8deg);
+    }
+    80% {
+        transform: rotate(8deg);
+    }
+}
+
+/* style the content of the message to show a grid with the dismiss button in the top right corner
+|h1  |  button |
+|p   |p        |
+*/
+.notification__message {
+    display: grid;
+    grid-gap: 0.2rem;
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    /* style the div as a rounded rectangle with a border on the left segment */
+    background: hsl(0, 0%, 100%);
+    border-radius: 10px;
+    box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.1), 0 2px 3px hsla(0, 0%, 0%, 0.1);
+    border-left: 0.5rem solid hsl(0, 0%, 100%);
+    /* by default hide the element from sight and include a transition for the chosen properties */
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition-property: transform, opacity, visibility;
+    transition-duration: 0.7s;
+    transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    min-width: 80%;
+}
+
+.notification__message h1 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.notification__message p {
+    max-width: 320px;
+    font-size: 0.8rem;
+    grid-column: 1/-1;
+}
+
+.notification__message button {
+    background: none;
+    border: none;
+    color: inherit;
+    width: 20px;
+    height: 20px;
+    grid-column: 2/3;
+    grid-row: 1/2;
+    align-self: center;
+}
+
+.notification__message button svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* when the .notification container has a class of .received transition the message into view */
+.notification.received .notification__message {
+    transform: translateX(0%);
+    opacity: 1;
+    visibility: visible;
+}
+
+.message--info {
+    border-left-color: #90dee9;
+}
+
+.message--success {
+    border-left-color: hsl(120, 67%, 74%);
+}
+
+.message--warning {
+    border-left-color: hsl(54deg 77% 53%);
+}
+
+.message--danger {
+    border-left-color: hsl(0, 67%, 74%);
+}
+
+.message--info #close-btn {
+    color: #90dee9;
+}
+
+.message--success #close-btn{
+    color: hsl(120, 67%, 74%);
+}
+
+.message--warning #close-btn{
+    color: hsl(54deg 77% 53%);
+}
+
+.message--danger #close-btn{
+    color: hsl(0, 67%, 74%);
+}
+
+.button-dismiss:hover {
+    cursor: pointer;
+}
+
+#close-btn {
+    position: absolute;
+    font-size: 2em;
+    top: 0%;
+}
+/* Notification css ends */
