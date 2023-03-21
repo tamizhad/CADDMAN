@@ -6,19 +6,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/page.css">
-    <link rel="stylesheet" href="lib3.0/bootstrap.min.css">
     <script src="js/jquery.min.js"></script>
+
     <script src="lib3.0/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib3.0/bootstrap.min.css">
+
+
+    <script src="js/eventHandler.js"></script>
 </head>
-    
+
 <body>
     <div class="col-sm-2 left-panel fill">
         <div class="left-panel-inner-div">
-            <div class="row">
+            <div class="row hide tamil">
                 <span class="logo"><img src="images/logo.png"></span>
                 <span class="company-name font-weight-bold">CADMANN ENGG</span>
             </div>
-
+            <div class="row left-panel-component active" for-id="client">
+                <span class="glyphicon glyphicon-play left-panel-arrow"></span>
+                <span class="glyphicon glyphicon-list-alt left-panel-icon"></span>
+                <span class="left-panel-component-name">Clients</span>
+            </div>
+            <div class="row left-panel-component" for-id="user">
+                <span class="glyphicon glyphicon-play left-panel-arrow"></span>
+                <span class="glyphicon glyphicon-user left-panel-icon"></span>
+                <span class="left-panel-component-name">Users</span>
+            </div>
+            <div class="row logout">
+                <span class="glyphicon glyphicon-off left-panel-icon"></span>
+                <span class="left-panel-component-name">Logout</span>
+            </div>
             <div class="row bottom-align">
                 <h4 id="user-name">Tamil Selvan</h4>
                 <div id="user-email">Tamizhad@gmail.com</div>
@@ -26,23 +43,26 @@
         </div>
     </div>
     <div class="col-sm-10">
-        <div class="main-panel">
+        <div class="main-panel active" id="client">
             <div class="row">
-                <h3 class="main-heading text-center">CLIENT LIST</h3>
+                <h3 class="main-heading text-center"><span
+                        class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;CLIENT LIST</h3>
             </div>
-            <div class="row add-client">
-                <button type="button" class="btn" id="add-client-btn">+ Add Client</button>
+            <div class="row add-div">
+                <span class="glyphicon glyphicon-filter filter"></span>
+                <button type="button" class="btn add-btn" id="add-client-btn" data-toggle="modal"
+                    data-target="#addClient" data-query="add">+ Add Client</button>
             </div>
-            <div class="row client-list table-responsive">
-                <table class="table table-hover table-condensed" id="client-list">
+            <div class="row client-list table-responsive table-wrapper-scroll-y">
+                <table class="table table-condensed" id="client-list">
                     <thead>
-                        <tr id="client-heading">
-                            <th class="text-nowrap">S. No</th>
-                            <th class="text-nowrap">Client ID</th>
+                        <tr class="text-nowrap" id="client-heading">
+                            <th>S. No</th>
+                            <th>Client ID</th>
                             <th>Client Name</th>
-                            <th class="text-nowrap">Contact Person</th>
+                            <th>Contact Person</th>
                             <th>Role</th>
-                            <th class="text-nowrap">Contact Number</th>
+                            <th>Contact Number</th>
                             <th>Email ID</th>
                             <th>Website Link</th>
                             <th>Address</th>
@@ -54,27 +74,287 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="client-list-1">
+                        <tr class="hide" id="search">
+                            <td class="data-sno"><input type="text" class="form-control data-sno" placeholder="search"/></td>
+                            <td class="data-clientId"><input type="text" class="form-control data-clientId" placeholder="Client Id"/></td>
+                            <td class="data-client-name"><input type="text" class="form-control data-client-name" placeholder="Client name"></td>
+                            <td class="data-client-contact-person"><input type="text" class="form-control data-client-contact-person" placeholder="Contact person"></td>
+                            <td class="data-role"><input type="text" class="form-control data-role" placeholder="Role"></td>
+                            <td class="data-contact-no"><input type="text" class="form-control data-contact-no" placeholder="Contact no"></td>
+                            <td class="data-email"><input type="text" class="form-control data-email" placeholder="Email"></td>
+                            <td class="data-client-website"><input type="text" class="form-control data-client-website" placeholder="Website"></td>
+                            <td class="data-client-address"><input type="text" class="form-control data-client-address" placeholder="Address"></td>
+                            <td class="data-client-state"><input type="text" class="form-control data-client-state" placeholder="State"></td>
+                            <td class="data-client-sales"><input type="text" class="form-control data-client-sales" placeholder="Sales"></td>
+                            <td class="data-client-lead-status"><input type="text" class="form-control data-client-lead-status" placeholder="Leas status"></td>
+                            <td class="data-due-date" class="text-nowrap"><input type="text" class="form-control data-due-date" placeholder="Due date"></td>
+                            <td class="data-clear"><button type="button" class="btn clear-btn">Clear X</button></td>
+                        </tr>
+                        <!-- <tr id="client-list-1">
+                            <td class="data-sno">1</td>
+                            <td class="data-clientId">00001</td>
+                            <td class="data-client-name">COUNTY FABRICATORS</td>
+                            <td class="data-client-contact-person">Laura Zapata, Alexande De La Cruz</td>
+                            <td class="data-role">Estimating/Project Manager</td>
+                            <td class="data-contact-no">914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td class="data-email">lzapata@countyfabricators.com</td>
+                            <td class="data-client-website">https://www.countyfabricators.com</td>
+                            <td class="data-client-address">175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td class="data-client-state">Pleasantvile, Newyork</td>
+                            <td class="data-client-sales">Select-sales</td>
+                            <td class="data-client-lead-status">Closed</td>
+                            <td class="data-due-date" class="text-nowrap">26-Feb-2023</td>
+                            <td class="data-action" class="text-center">
+                                <span class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#addClient"></span>
+                                <span class="glyphicon glyphicon-trash delete"></span>
+                            </td>
+                        </tr> -->
+                        <tr class="hide" id="client-list-template">
+                            <td class="data-sno"></td>
+                            <td class="data-clientId"></td>
+                            <td class="data-client-name"></td>
+                            <td class="data-client-contact-person"></td>
+                            <td class="data-role"></td>
+                            <td class="data-contact-no"></td>
+                            <td class="data-email"></td>
+                            <td class="data-client-website"></td>
+                            <td class="data-client-address"></td>
+                            <td class="data-client-state"></td>
+                            <td class="data-client-sales"></td>
+                            <td class="data-client-lead-status"></td>
+                            <td class="data-due-date" class="text-nowrap"></td>
+                            <td class="data-action" class="text-center">
+                                <span class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#addClient"></span>
+                                <span class="glyphicon glyphicon-trash delete" query-type="delete-client"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="main-panel hide" id="user">
+            <div class="row">
+                <h3 class="main-heading text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;USERS
+                </h3>
+            </div>
+            <div class="row add-div">
+                <span class="glyphicon glyphicon-filter filter"></span>
+                <button type="button" class="btn add-btn" id="add-user-btn" data-toggle="modal" data-target="#addUser" data-query="add">+&nbsp;&nbsp;Add&nbsp;&nbsp;User</button>
+            </div>
+            <div class="row user-list table-responsive">
+                <table class="table table-hover table-condensed" id="user-list">
+                    <thead>
+                        <tr id="user-heading">
+                            <th class="text-nowrap">S. No</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Email ID</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="user-list-1">
                             <td>1</td>
-                            <td>00001</td>
-                            <td>COUNTY FABRICATORS</td>
-                            <td>Laura Zapata, Alexande De La Cruz</td>
-                            <td>Estimating/Project Manager</td>
-                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
-                            <td>lzapata@countyfabricators.com</td>
-                            <td>https://www.countyfabricators.com</td>
-                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
-                            <td>Pleasantvile, Newyork</td>
-                            <td>Select-sales</td>
-                            <td>Closed</td>
-                            <td class="text-nowrap">26-Feb-2023</td>
-                            <td>Mary</td>
+                            <td>Tamil</td>
+                            <td>Selvan</td>
+                            <td>tamilad</td>
+                            <td>111</td>
+                            <td>Tamizhad@gmail.com</td>
+                            <td>staff</td>
+                            <td>:</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <div id="addClient" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" query-type="client">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Client</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-name">Client name</label>
+                                <input type="text" class="form-control" id="client-name" placeholder="Client name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-contact-person">Client contact person</label>
+                                <input type="text" class="form-control" id="client-contact-person"
+                                    placeholder="Contact person">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" class="form-control" id="role" placeholder="Role">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="contact-no">Contact no</label>
+                                <input type="text" class="form-control" id="contact-no" placeholder="Contact no">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-website">Website</label>
+                                <input type="text" class="form-control" id="client-website" placeholder="Website">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-address">Client address</label>
+                                <input type="text" class="form-control" id="client-address" placeholder="Address">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-state">State</label>
+                                <input type="text" class="form-control" id="client-state" placeholder="State">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-lead-status">Lead status</label>
+                                <input type="text" class="form-control" id="client-lead-status"
+                                    placeholder="Lead status">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="due-date">Due date</label>
+                                <input type="text" class="form-control" id="due-date" placeholder="Due date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="client-sales">Client sales</label>
+                                <input type="text" class="form-control" id="client-sales" placeholder="Client sales">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary hide" id="saving-btn">Saving...</button>
+                    <button type="button" class="btn btn-primary" id="save-btn">Save</button>
+                    <button type="button" class="btn btn-default cancel" id="cancel-btn"
+                        data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addUser" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" query-type="user">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add User</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="first-name">First name</label>
+                                <input type="text" class="form-control" id="first-name" placeholder="First name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="last-name">Last name</label>
+                                <input type="text" class="form-control" id="last-name" placeholder="Last name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="text" class="form-control" id="password" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" id="email" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" class="form-control" id="role" placeholder="Role">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary hide" id="saving-btn">Saving...</button>
+                    <button type="button" class="btn btn-primary" id="save-btn">Save</button>
+                    <button type="button" class="btn btn-default cancel" id="cancel-btn"
+                        data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification">
+        <div class="notification__message message--info">
+            <h1>Info</h1>
+            <p></p>
+            <button class="button-dismiss" aria-labelledby="button-dismiss">
+                <span id="button-dismiss" hidden>Dismiss</span>
+                <span id="close-btn">x</span>
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>
