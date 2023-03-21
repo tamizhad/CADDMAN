@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+.hide, *[class*="hide-"]{
+    display: none !important;
+}
+
 .left-panel {
     background-color: rgb(21 74 136);
     color: white;
@@ -13,6 +17,7 @@ html, body {
 }
 
 .company-name{
+    font-weight: bold;
     padding-left: 2%;
 }
 
@@ -26,10 +31,9 @@ html, body {
     border-bottom: 1px solid #dddddd;
 }
 
-.add-client{
-    padding-top: 1%;
+.add-div{
     padding-bottom: 1%;
-    padding-left: 92.5%;
+    padding-left: 90.5%;
 }
 
 table{
@@ -50,13 +54,13 @@ td{
     padding-left: 1%;
 }
 
-.client-list{
-    max-width: 100%;
+.add-btn{
+    background-color: rgb(21 85 159) !important;
+    color: white;
 }
 
-#add-client-btn{
-    background-color: rgb(0 66 241) !important;
-    color: white;
+.add-btn:hover{
+    color: white !important;
 }
   
 .fill {
@@ -70,8 +74,19 @@ td{
     width: 82%;
 }
 
+.logout{
+    position: absolute;
+    top: 82%;
+    width: 82%;
+}
+
+.logout .left-panel-icon{
+    padding-right: 7%;    
+    font-size: 1.1em;
+}
+
 #login {
-    background-image: url('file:///Users/temp-tamil/Git/CADDMAN/public/images/login_bg.png');
+    background-image: url('/images/login_bg.png');
     background-repeat: no-repeat;
     background-color: #154a88;
     background-size: 100% 100%;
@@ -100,7 +115,7 @@ td{
 
 #login #username::placeholder, #login #password::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: white;
-    opacity: 1; /* Firefox */
+    opacity: 0.5; /* Firefox */
 }
 
 #login #username:-ms-input-placeholder,  #login #password:-ms-input-placeholder{ /* Internet Explorer 10-11 */
@@ -118,7 +133,7 @@ td{
 }
 
 #login-btn:hover{
-    background-color: rgb(34 223 127);;
+    background-color: rgb(34 223 127);
     color: white;
 }
 
@@ -141,7 +156,8 @@ td{
     overflow-x: hidden;
     /* padding to avoid cropping the box-shadow on the message */
     padding: 0.25rem;
-    min-width: 25%;
+    min-width: 20%;
+    z-index: 2000;
 }
 
 .notification *{
@@ -178,15 +194,15 @@ td{
 */
 .notification__message {
     display: grid;
-    grid-gap: 0.2rem;
+    grid-gap: 0.6em;
     grid-template-columns: 1fr auto;
-    padding: 0.5rem 1rem;
-    margin: 1rem 0;
+    padding: 1.2em 1em;
+    margin: 1em 0;
     /* style the div as a rounded rectangle with a border on the left segment */
     background: hsl(0, 0%, 100%);
     border-radius: 10px;
     box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.1), 0 2px 3px hsla(0, 0%, 0%, 0.1);
-    border-left: 0.5rem solid hsl(0, 0%, 100%);
+    border-left: 0.5em solid hsl(0, 0%, 100%);
     /* by default hide the element from sight and include a transition for the chosen properties */
     transform: translateX(100%);
     opacity: 0;
@@ -194,18 +210,18 @@ td{
     transition-property: transform, opacity, visibility;
     transition-duration: 0.7s;
     transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
-    min-width: 80%;
+    min-width: 100%;
 }
 
 .notification__message h1 {
-    font-size: 1.1rem;
+    font-size: 1.1em;
     font-weight: 500;
     text-transform: capitalize;
 }
 
 .notification__message p {
     max-width: 320px;
-    font-size: 0.8rem;
+    font-size: 0.9em;
     grid-column: 1/-1;
 }
 
@@ -265,13 +281,139 @@ td{
     color: hsl(0, 67%, 74%);
 }
 
-.button-dismiss:hover {
+.button-dismiss:hover{
     cursor: pointer;
 }
 
 #close-btn {
     position: absolute;
-    font-size: 2em;
+    font-size: 1.5em;
     top: 0%;
 }
 /* Notification css ends */
+
+.left-panel-arrow{
+    font-size: 0.6em;
+    padding-right: 6%;
+}
+
+.left-panel-icon{    
+    padding-right: 9%;
+}
+
+.left-panel-component-name{
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.left-panel-component{
+    padding-top: 15%;
+}
+
+.left-panel-component.active{
+    color: rgb(34 223 127);
+}
+
+.left-panel-component.hover:not(.active), .logout:hover{
+    color: #a7a3a3;
+}
+
+.left-panel-icon:hover, .left-panel-component-name:hover, .left-panel-arrow:hover, .logout:hover{
+    cursor: pointer;
+}
+
+/* .table thead th{
+    background-color: #04AA6D;
+    color: white;
+} */
+
+.table-responsive{ 
+    overflow: auto; 
+    max-height: 45em; 
+    border-radius: 10px;
+    box-shadow: 0 0 40px 0 rgb(0 0 0 / 15%);
+    max-width: 101%;
+}
+.table-responsive thead th { position: sticky; top: 0; z-index: 1;}
+.table-responsive tr#search { position: sticky; top: 10%; z-index: 10;}
+
+.table td{
+    font-size: 0.95em;
+    color: gray;
+}
+.table th{
+    padding-top: 1.3em !important;
+    padding-bottom: 1.3em !important;
+    font-size: 1.1em;
+    color: #fff;
+    background-color: rgb(57, 57, 57);
+}
+
+.table tr:nth-child(even) {
+    background-color: rgb(221, 235, 250) !important;
+}
+
+.table tr th:nth-child(1), .table tr td:nth-child(1){
+    padding-left: 1em;
+}
+
+.modal-footer{
+    text-align: center !important;
+}
+
+button.cancel, button.cancel{
+    color: #3279b7 !important;
+    border: 1px solid #3279b7 !important;
+}
+
+.modal-dialog .close{
+    opacity: 1;
+    color: #3279b7 !important;
+}
+
+.modal-dialog .close:hover{
+    opacity: 1;
+    color: #3279b7 !important;
+}
+
+#saving-btn{    
+    cursor: auto;
+}
+
+.edit{
+    cursor: pointer;
+    font-size: 1.2em;
+    color: rgb(9, 184, 9);
+    padding-right: 10%;
+}
+
+.delete{
+    cursor: pointer;
+    font-size: 1.2em;
+    color: red;
+}
+
+.filter {
+    font-size: 160%;
+    margin-right: 7%;
+    color: grey;
+    cursor: pointer;
+}
+
+.filter:hover{
+    color: rgb(76, 74, 74);
+}
+
+.glyphicon.filter{
+    top: 0.3em;
+}
+
+tr#search td{
+    min-width: 12em;
+    background-color: #e1dddd;
+}
+
+.clear-btn {
+    background-color: gray;
+    color: white;
+}

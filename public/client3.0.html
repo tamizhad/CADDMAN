@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Client List</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/page.css">
+    <!-- <link rel="stylesheet" href="lib3.0/bootstrap.min.css"> -->
+    <script src="js/jquery.min.js"></script>
+    <script src="lib3.0/bootstrap.min.js"></script>
+    <script src="lib3.0/bootstrap3.7.min.js"></script>
+    <link rel="stylesheet" href="lib3.0/bootstrap3.7.min.css">
+    <script src="js/eventHandler.js"></script>
+</head>
+    
+<body>
+    <div class="col-sm-2 left-panel fill">
+        <div class="left-panel-inner-div">
+            <div class="row">
+                <span class="logo"><img src="images/logo.png"></span>
+                <span class="company-name font-weight-bold">CADMANN ENGG</span>
+            </div>
+            <div class="row left-panel-component active" for-id="clients">
+                <span class="glyphicon glyphicon-play left-panel-arrow"></span>
+                <span class="glyphicon glyphicon-list-alt left-panel-icon"></span>
+                <span class="left-panel-component-name">Clients</span>                        
+            </div>
+            <div class="row left-panel-component" for-id="users">
+                <span class="glyphicon glyphicon-play left-panel-arrow"></span>
+                <span class="glyphicon glyphicon-user left-panel-icon"></span>
+                <span class="left-panel-component-name">Users</span>                        
+            </div>
+            <div class="row logout" >
+                <span class="glyphicon glyphicon-off left-panel-icon"></span>
+                <span class="left-panel-component-name">Logout</span> 
+            </div>
+            <div class="row bottom-align">
+                <h4 id="user-name">Tamil Selvan</h4>
+                <div id="user-email">Tamizhad@gmail.com</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="main-panel active" id="clients">
+            <div class="row">
+                <h3 class="main-heading text-center"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;CLIENT LIST</h3>
+            </div>
+            <div class="row add-div">
+                <button type="button" class="btn add-btn" id="add-client-btn">+ Add Client</button>
+            </div>
+            <div class="row client-list table-responsive table-wrapper-scroll-y">
+                <table class="table table-condensed" id="client-list">
+                    <thead>
+                        <tr class="text-nowrap" id="client-heading">
+                            <th>S. No</th>
+                            <th>Client ID</th>
+                            <th>Client Name</th>
+                            <th>Contact Person</th>
+                            <th>Role</th>
+                            <th>Contact Number</th>
+                            <th>Email ID</th>
+                            <th>Website Link</th>
+                            <th>Address</th>
+                            <th>State</th>
+                            <th>Sales</th>
+                            <th>Lead Status</th>
+                            <th>Due Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                        <tr id="client-list-1">
+                            <td>1</td>
+                            <td>00001</td>
+                            <td>COUNTY FABRICATORS</td>
+                            <td>Laura Zapata, Alexande De La Cruz</td>
+                            <td>Estimating/Project Manager</td>
+                            <td>914-741-0219 ex:313 914-741-0219 ext:712</td>
+                            <td>lzapata@countyfabricators.com</td>
+                            <td>https://www.countyfabricators.com</td>
+                            <td>175 Marble Ave, Pleasant ville, NY 10570, United States</td>
+                            <td>Pleasantvile, Newyork</td>
+                            <td>Select-sales</td>
+                            <td>Closed</td>
+                            <td class="text-nowrap">26-Feb-2023</td>
+                            <td>Mary</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="main-panel hide" id="users">
+            <div class="row">                
+                <h3 class="main-heading text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;USERS</h3>
+            </div>
+            <div class="row add-div">
+                <button type="button" class="btn add-btn" id="add-user-btn">+ Add User</button>
+            </div>
+            <div class="row user-list table-responsive">
+                <table class="table table-hover table-condensed" id="user-list">
+                    <thead>
+                        <tr id="user-heading">
+                            <th class="text-nowrap">S. No</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Email ID</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="user-list-1">
+                            <td>1</td>
+                            <td>Tamil</td>
+                            <td>Selvan</td>
+                            <td>tamilad</td>
+                            <td>111</td>
+                            <td>Tamizhad@gmail.com</td>
+                            <td>staff</td>
+                            <td>:</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html> 
