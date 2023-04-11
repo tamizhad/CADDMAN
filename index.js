@@ -5,6 +5,7 @@ const cheerio = require('cheerio')
 const path = require('path')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const app = express()
@@ -13,6 +14,23 @@ const port = process.env.APP_PORT;
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'atg237gyjhf4jgdghs7jw8wjp',
+    resave: false,
+    saveUninitialized: false
+}))
+  
+// function authentication(req, res){
+//     try{
+//         if(!req.session.isAutheticated){
+//             res.writeHead(302, {'Location': 'login'});
+//             res.end();
+//         }
+//     }catch(err){
+//         console.log(err);
+//         res.sendFile(path.join(__dirname, 'public/internal-error.html'));
+//     }
+// }
 
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -24,47 +42,153 @@ var con = mysql.createConnection({
 app.get('/', (req, res) => {
     res.writeHead(302, {'Location': 'login'});
     res.end();
+    return;
 })
 
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/login.html'));
+    if(req.session.isAutheticated){
+        res.writeHead(302, {'Location': 'home'});
+        res.end();
+        return;
+    }else{
+        res.sendFile(path.join(__dirname, 'public/login.html'));
+    }    
 })
 
+app.post('/logout', (req, res) => {
+    try{
+        delete req.session.fname;
+        delete req.session.lname;
+        delete req.session.username;
+        delete req.session.email;
+        delete req.session.password;
+        delete req.session.role;
+        delete req.session.userId;
+        req.session.isAutheticated = false;
+        res.json({"code": 200, "success": "user logged out"}).end();
+    }catch(err){
+        res.json({"code": 404, "error": "/logout - internal error"}).end();
+    }
+})
+
+async function convertJsonToHTML(jsonObj, dataType, selector){
+    var html = fs.readFileSync(path.join(__dirname, 'public/client.html'));
+    const $ = cheerio.load(html);
+    var cnt = 1;
+    
+    for(var i =0 ;i<jsonObj.results.length;i++){
+        var template = $('.main-panel#'+dataType+' #'+dataType+'-list-template').toString();
+        for(var key in jsonObj.results[i]){
+            var replace = "{{"+key+"}}";
+            var re = new RegExp(replace,"g");
+            template = template.replace(re, jsonObj.results[i][key]);
+        }
+        template = template.replace('{{sno}}', (cnt++));
+        $('table tbody').append($(template).removeClass('hide').attr('id', jsonObj.results[i].id));
+    }
+
+    $('.main-panel .count .value').text(jsonObj.results.length);
+
+    if(selector){
+        return $(selector).toString();
+    }
+    return $.html();
+}
 
 app.get('/home', async function(req, res){
     try{
-        var html = fs.readFileSync(path.join(__dirname, 'public/client.html'));
-        const $ = cheerio.load(html);
-
-        var query = 'select * from '+config.db.clientList;
-        var userObj = await executeQuery(query);
-
         
-        for(var i =0 ;i<userObj.results.length;i++){
-            var row =   '<tr id="'+(userObj.results[i].id)+'">'+
-                            '<td class="data-sno">'+(i+1)+'</td>'+
-                            '<td class="data-clientId">'+(userObj.results[i].client_id)+'</td>'+
-                            '<td class="data-client-name">'+(userObj.results[i].client_name)+'</td>'+
-                            '<td class="data-client-contact-person">'+(userObj.results[i].contact_person)+'</td>'+
-                            '<td class="data-role">'+(userObj.results[i].role)+'</td>'+
-                            '<td class="data-contact-no">'+(userObj.results[i].contact_no)+'</td>'+
-                            '<td class="data-email">'+(userObj.results[i].email_id)+'</td>'+
-                            '<td class="data-client-website">'+(userObj.results[i].website_link)+'</td>'+
-                            '<td class="data-client-address">'+(userObj.results[i].address)+'</td>'+
-                            '<td class="data-client-state">'+(userObj.results[i].state)+'</td>'+
-                            '<td class="data-client-sales">'+(userObj.results[i].sales)+'</td>'+
-                            '<td class="data-client-lead-status">'+(userObj.results[i].lead_status)+'</td>'+
-                            '<td class="data-due-date" class="text-nowrap">'+(userObj.results[i].due_date)+'</td>'+
-                            '<td class="data-action" class="text-center"><span class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#addClient"></span><span class="glyphicon glyphicon-trash delete" query-type="delete-row"></span></td>'+
-                        '</tr>'
-            $('table tbody').append(row);
+        if(!req.session.isAutheticated){
+            res.writeHead(302, {'Location': 'login'});
+            res.end();
+            return;
         }
 
+        req.body.dataType = req.body.dataType ? req.body.dataType : 'client';
+        req.body.queryType = req.body.queryType ? req.body.queryType : 'get-rows';
+        req.body.username = req.body.username ? req.body.username : req.session.username;
+
+        if(/staff/i.test(req.session.role)){
+            req.body.queryType += '-'+req.body.dataType;
+        }
+
+        var query = await getQuery(req, res, req.body.queryType, req.body.dataType);
+        var userObj = await executeQuery(query);
+        var html = await convertJsonToHTML(userObj, req.body.dataType);
+
+        const $ = cheerio.load(html);
+        $('.userobj #user-fname-name').text(req.session.fname);
+        $('.userobj #user-lname-name').text(req.session.lname);
+        $('.userobj #user-email').text(req.session.email);
+        $('.userobj #user-name').text(req.session.username);
 
         res.send($.html());
     }catch(err){
         console.log(err);
         res.sendFile(path.join(__dirname, 'public/internal-error.html'));
+    }
+})
+
+app.post('/get-data', async function(req, res){
+    try{
+
+        req.body.dataType = req.body.dataType ? req.body.dataType : 'client';
+        req.body.queryType = req.body.queryType ? req.body.queryType : 'get-rows';
+
+        req.body.username = req.body.username ? req.body.username : req.session.username;
+
+        if(/staff/i.test(req.session.role)){
+            req.body.queryType += '-'+req.body.dataType;
+        }
+
+        var query = await getQuery(req, res, req.body.queryType, req.body.dataType);
+        var userObj = await executeQuery(query);
+        
+        var html = await convertJsonToHTML(userObj, req.body.dataType);
+        
+        res.json({'code':200, 'status': 'success', 'html':html});
+    }catch(err){
+        console.log(err);
+        res.sendFile(path.join(__dirname, 'public/internal-error.html'));
+    }
+})
+
+app.post('/update-db', async function(req, res){
+    try{
+        req.body.curRowId = (req.body.curRowId) ? req.body.curRowId : uuidv4();
+        var id = req.body.curRowId;
+        var query = await getQuery(req, res, req.body.queryType, req.body.dataType, id);
+
+        if(/{{\w+}}/.test(query)){
+            res.json({"code": 400, "error": "value not replace properly"}).end();
+            return;
+        }
+        
+        var resultObj = await executeQuery(query);
+        if(resultObj && resultObj.status == 'success'){
+
+            var html = '';
+            if(/^(add\-|update\-)/i.test(req.body.queryType)){
+                var query = await getQuery(req, res, 'get-row-by-id', req.body.dataType, id);
+                if(/{{\w+}}/.test(query)){
+                    res.json({"code": 400, "error": "value not replace properly"}).end();
+                    return;
+                }            
+                resultObj = await executeQuery(query);
+                html = await convertJsonToHTML(resultObj, req.body.dataType, '.main-panel#'+req.body.dataType+' .table tr#'+id);
+            }
+
+            res.json({"code": 200, "message": "db updated", 'new_row': html}).end();
+            return;
+        }
+        if(req.body.queryType == 'add-user' && resultObj && resultObj.status == 'failed' && resultObj.error && resultObj.error.code == 'ER_DUP_ENTRY'){
+            res.json({"code": 400, "message": "duplicate username"}).end();
+            return;
+        }
+        res.json({"code": 400, "error": "db not updated"}).end();
+    }catch(err){
+        console.log(err);
+        res.json({"code": 400, "error": "/update-db - internal error"}).end();
     }
 })
 
@@ -77,6 +201,15 @@ app.post('/authenticate', async function(req, res){
 
         for(user of userObj["results"]){
             if((user.username == username || user.email == username) && user.password == password){
+                req.session.fname = user.f_name;
+                req.session.lname = user.l_name;
+                req.session.username = user.username;
+                req.session.email = user.email;
+                req.session.password = user.password;
+                req.session.role = user.role;
+                req.session.userId = user.id;
+                req.session.isAutheticated = true;
+
                 res.json({"code": 200, "success": "user authenticated", "user": user}).end();
                 return;
             }
@@ -84,47 +217,32 @@ app.post('/authenticate', async function(req, res){
         res.json({"code": 400, "error": "user not authenticated"}).end();
     }catch(err){
         console.log(err);
-        res.json({"code": 400, "error": "/authenticate - internal error"}).end();
+        res.json({"code": 404, "error": "/authenticate - internal error"}).end();
     }
 })
 
-app.post('/update-db', async function(req, res){
-    try{
-        var queryType = req.body.queryType;
-        
+async function getQuery(req, res, queryType, dataType, id){
+        id = id?id: uuidv4();
         var query = config.db.query[queryType];
         for(var key in req.body){
             query = query.replace('{{'+key+'}}', req.body[key]);
         }
 
-        if(req.body.dataType){
-            query = query.replace('{{tableName}}', req.body.dataType+"_list");    
-        }        
+        if(dataType){
+            query = query.replace('{{tableName}}', dataType+"_list");    
+        }
 
         query = query.replace('{{table}}', config.db[config.db.table[queryType]]);
-        query = query.replace('{{id}}', uuidv4());
+        query = query.replace('{{id}}', id);
         query = query.replace('{{createdTime}}', new Date());
 
-        if(/{{\w+}}/.test(query)){
-            res.json({"code": 400, "error": "value not replace properly"}).end();
-            return;
+        if(/{{clientId}}/.test(query)){
+            var tempQuery = await getQuery(req, res, "get-all-rows", "client", "");
+            var tempObj = await executeQuery(tempQuery);
+            query = query.replace('{{clientId}}', 'C'+(''+(tempObj["results"].length+1)).padStart(5, "0"));
         }
-        
-        var resultObj = await executeQuery(query);
-        if(resultObj && resultObj.status == 'success'){
-            res.json({"code": 200, "message": "db updated"}).end();
-            return;
-        }
-        if(queryType == 'add-user' && resultObj && resultObj.status == 'failed' && resultObj.error && resultObj.error.code == 'ER_DUP_ENTRY'){
-            res.json({"code": 400, "message": "duplicate username"}).end();
-            return;
-        }
-        res.json({"code": 400, "error": "db not updated"}).end();
-    }catch(err){
-        console.log(err);
-        res.json({"code": 400, "error": "/update-db - internal error"}).end();
-    }
-})
+        return query;
+}
 
 async function getDbConnection(req, res){   
     return new Promise(async function(resolve, reject){
@@ -152,7 +270,7 @@ async function executeQuery(queryStr){
         try{
             var dbCon = await getDbConnection();            
             await dbCon.query(queryStr, function(error, results, fields){
-                if (error){
+                if (error || (/^(insert|delete|update)/i.test(queryStr) && results.affectedRows<1)){
                     resolve({"error": error, "results": results, "fields": fields, "status": "failed"});
                 }else{
                     resolve({"error": error, "results": results, "fields": fields, "status": "success"});

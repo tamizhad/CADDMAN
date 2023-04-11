@@ -4,19 +4,31 @@ const config = {
         userList : "user_list",
         clientList: "client_list",
         query: {
-            'add-client': 'INSERT INTO {{table}} VALUES("{{clientName}}", "{{clientContactPerson}}", "{{role}}", "{{clientContactNo}}", "{{email}}", "{{clientWebsite}}", "{{clientAddress}}", "{{clientState}}", "{{clientSales}}", "{{clientLeadStatus}}", "{{dueDate}}", "{{createdTime}}", "{{id}}");',
+            'add-client': 'INSERT INTO {{table}} VALUES(NULL, "{{id}}", "{{clientName}}", "{{clientContactPerson}}", "{{role}}", "{{clientContactNo}}", "{{email}}", "{{clientWebsite}}", "{{clientAddress}}", "{{clientState}}", "{{clientSales}}", "{{clientLeadStatus}}", "{{dueDate}}", "{{createdTime}}", "{{clientId}}", "active");',
+            'update-client': 'UPDATE {{table}} SET client_name = "{{clientName}}", contact_person = "{{clientContactPerson}}", role = "{{role}}", contact_no = "{{clientContactNo}}", email = "{{email}}", website_link = "{{clientWebsite}}", address = "{{clientAddress}}", state = "{{clientState}}", sales = "{{clientSales}}", lead_status = "{{clientLeadStatus}}", due_date = "{{dueDate}}", client_id="{{clientId}}", status="{{status}}" WHERE id="{{curRowId}}";',
 
-            'add-user': 'INSERT INTO {{table}} VALUES("{{firstName}}", "{{lastName}}", "{{username}}", "{{password}}", "{{email}}", "{{role}}", "{{createdTime}}", "{{id}}");',
-            'get-user' : 'SELECT * FROM {{table}} WHERE username = "{{username}}";',            
-            
-            'get-rows': 'SELECT * FROM {{tableName}};',
-            'delete-row': 'DELETE FROM {{tableName}} WHERE id="{{curRowId}}";'
+            'add-user': 'INSERT INTO {{table}} VALUES(NULL, "{{id}}", "{{firstName}}", "{{lastName}}", "{{username}}", "{{password}}", "{{email}}", "{{role}}", "{{createdTime}}", "active");',
+            'get-user' : 'SELECT * FROM {{table}} WHERE username = "{{username}}";',
+            'update-user': 'UPDATE {{table}} SET f_name = "{{firstName}}", l_name = "{{lastName}}", username = "{{username}}", password = "{{password}}", email = "{{email}}", role = "{{role}}" WHERE id="{{curRowId}}";',
+
+            'get-row-by-id' : 'SELECT * FROM {{tableName}} WHERE id = "{{curRowId}}";',
+            'get-all-rows': 'SELECT * FROM {{tableName}};',
+            'get-rows': 'SELECT * FROM {{tableName}} WHERE status NOT LIKE "archive";',
+            'get-rows-client': 'SELECT * FROM {{tableName}} WHERE sales="{{username}}"',
+            'get-rows-user': 'SELECT * FROM {{table}} WHERE username = "{{username}}";',
+            'delete-row': 'DELETE FROM {{tableName}} WHERE id="{{curRowId}}";',
+            'move-archive': 'UPDATE {{table}} SET status = "archive" WHERE id="{{curRowId}}";'
         },
         table: {
             'add-client': 'clientList',
+            'update-client': 'clientList',
+            'get-rows-client': 'clientList',
+            'move-archive': 'clientList',
 
             'add-user': 'userList',
             'get-user': 'userList',
+            'update-user': 'userList',
+            'get-rows-user': 'userList',
         }
     }    
 }

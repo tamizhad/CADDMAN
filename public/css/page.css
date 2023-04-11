@@ -31,9 +31,12 @@ html, body {
     border-bottom: 1px solid #dddddd;
 }
 
-.add-div{
+#client .add-div{
     padding-bottom: 1%;
-    padding-left: 90.5%;
+}
+
+#user .add-div{
+    padding-bottom: 1%;
 }
 
 table{
@@ -395,7 +398,7 @@ button.cancel, button.cancel{
 
 .filter {
     font-size: 160%;
-    margin-right: 7%;
+    margin-right: 2%;
     color: grey;
     cursor: pointer;
 }
@@ -404,9 +407,16 @@ button.cancel, button.cancel{
     color: rgb(76, 74, 74);
 }
 
-.glyphicon.filter{
+#client .glyphicon.filter{
     top: 0.3em;
+    padding-left: 15%;
 }
+
+#user .glyphicon.filter{
+    top: 0.3em;
+    padding-left: 30%;
+}
+
 
 tr#search td{
     min-width: 12em;
@@ -416,4 +426,43 @@ tr#search td{
 .clear-btn {
     background-color: gray;
     color: white;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+    background-color: #337ab7 !important;
+    text-decoration: none;
+}
+
+.dropdown-div .dropdown-toggle{
+    width: 50%;
+    text-align: left;
+}
+
+.dropdown-div .dropdown-menu{
+    width: 50%;
+}
+
+tr .badge{
+    min-width: 100%;
+    text-transform: uppercase;
+}
+
+.badge.open{
+    background-color: #b4a510;
+}
+
+.badge.closed{
+    background-color: #9747ff;
+}
+
+.badge.working{
+    background-color: #1bc8ff;
+}
+
+.badge.converted{
+    background-color: #22df7f;
+}
+
+.count{
+    font-weight: bold;
 }
