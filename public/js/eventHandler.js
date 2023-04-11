@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+
     $('#login-btn').on('click', function () {
 
         // var type = "danger";   //info, success, warning, danger
@@ -17,10 +18,22 @@ $(document).ready(function () {
             url: "/authenticate",
             data: params,
             success: function (data) {
-                $("#resultarea").text(data);
+                if(data && data.code == 200){
+                    location.href = '/home';
+                }else if(data && data.code == 400){
+                    $('.error').removeClass('hide');
+                }else{
+                    var type = "danger";   //info, success, warning, danger
+                    var title = "Login error";
+                    var message = "Internal problem";
+                    showMessage(type, title, message);
+                }
             },
             error: function (data) {
-                $("#resultarea").text(data);
+                var type = "danger";   //info, success, warning, danger
+                var title = "Login error";
+                var message = "Internal problem";
+                showMessage(type, title, message);
             },
         });
 
@@ -43,10 +56,34 @@ $(document).ready(function () {
         parent.addClass('active');        
 
         var forId = $(parent).attr('for-id');
-        if($('#'+forId).length > 0){
-            $('.main-panel').addClass('hide').removeClass('active');
-            $('#'+forId).removeClass('hide').addClass('active');;
+
+        var params = {
+            'dataType' : forId
         }
+
+        $.ajax({
+            type: "POST",
+            url: "/get-data",
+            data: params,
+            success: function (data) {
+                if(data && data.code == 200){
+                    $('.main-panel').addClass('hide').removeClass('active');
+                    var newData = $(data.html).find('#'+forId).html();
+                    $('#'+forId).removeClass('hide').addClass('active').html(newData);
+                }else{
+                    console.log();
+                }                
+            },
+            error: function (data) {
+                var type = "danger";   //info, success, warning, danger
+                var title = "Error";
+                var message = "Unable to get "+forId+" data";
+                showMessage(type, title, message);
+                setTimeout(function(){
+                    dismissMessage();
+                }, 5000);
+            },
+        });
     });
 
     //To hide/show filter row
@@ -92,22 +129,26 @@ $(document).ready(function () {
     $(document).on('click', "#save-btn", function(ele) {
         var curModalId = $(ele.target).closest('.modal').attr('id');
         var parentEle = $(ele.target).closest('.modal-dialog');
+        var saveType = $(ele.target).closest('.modal').attr('data-save-type');
+        var dataType = $(parentEle).attr("query-type");
 
         $('#saving-btn').removeClass('hide');
         $('#save-btn').addClass('hide');
         var params = {
-            "queryType": $(parentEle).attr("query-type"),
+            "curRowId": $(ele.target).closest('.modal').attr('data-id'),            
+            "queryType": saveType+"-"+dataType,
+            "dataType": dataType,
             "clientName": $(parentEle).find("#client-name").val(),
             "clientContactPerson": $(parentEle).find("#client-contact-person").val(),
-            "role": $(parentEle).find("#role").val(),
+            "role": $(parentEle).find("#role").text(),
             "clientContactNo": $(parentEle).find("#contact-no").val(),
             "email": $(parentEle).find("#email").val(),
             "clientWebsite": $(parentEle).find("#client-website").val(),
             "clientAddress": $(parentEle).find("#client-address").val(),
             "clientState": $(parentEle).find("#client-state").val(),
-            "clientLeadStatus": $(parentEle).find("#client-lead-status").val(),
+            "clientLeadStatus": $(parentEle).find("#client-lead-status").text(),
             "dueDate": $(parentEle).find("#due-date").val(),
-            "clientSales": $(parentEle).find("#client-sales").val(),
+            "clientSales": $(parentEle).find("#client-sales").text(),
 
             "firstName": $(parentEle).find("#first-name").val(),
             "lastName": $(parentEle).find("#last-name").val(),
@@ -120,11 +161,26 @@ $(document).ready(function () {
             url: "/update-db",
             data: params,
             success: function (data) {
+                $('#saving-btn').addClass('hide');
+                $('#save-btn').removeClass('hide');
+
                 if(data && data.code == 200){
                     $('#'+curModalId).modal('hide')
+
+                    if(data.new_row){
+                        var curId = $(data.new_row).attr('id');
+                        if(saveType == 'add'){
+                            var rowCnt = $('.main-panel.active#'+dataType+' .table tbody tr:not(.hide):not(#search):not(.fade)').length;                                                  
+                            $('.main-panel.active#'+dataType+' .table tbody').append(data.new_row);
+                            $('.main-panel.active#'+dataType+' #'+curId).find('.data-sno').text((rowCnt+1));
+                        }else if(saveType == 'update') {
+                            $('.main-panel.active#'+dataType+' #'+curId).html($(data.new_row).html());
+                        }
+                    }          
+
                     var type = "success";   //info, success, warning, danger
                     var title = "Success";
-                    var message = "User added!";
+                    var message = (saveType == 'update')? dataType+" updated!" : dataType+" added!";
                     showMessage(type, title, message);
                     setTimeout(function(){
                         dismissMessage();
@@ -132,15 +188,31 @@ $(document).ready(function () {
                 }else if(data && data.code == 400 && /(duplicate username)/.test(data.message)){
                     var type = "danger";   //info, success, warning, danger
                     var title = "Error";
-                    var message = "Username already taken!";
+                    var message = "Username already exist!";
                     showMessage(type, title, message);
                     setTimeout(function(){
                         dismissMessage();
                     }, 5000);
-                }                
+                }else{
+                    var type = "danger";   //info, success, warning, danger
+                    var title = "Error";
+                    var message = "Can't "+saveType+" "+dataType+"!";
+                    showMessage(type, title, message);
+                    setTimeout(function(){
+                        dismissMessage();
+                    }, 5000);
+                }
             },
             error: function (data) {
-                $('#'+curModalId).modal('hide')
+                $('#saving-btn').addClass('hide');
+                $('#save-btn').removeClass('hide');
+                var type = "danger";   //info, success, warning, danger
+                var title = "Error";
+                var message = "Can't "+saveType+" "+dataType+"!";
+                showMessage(type, title, message);
+                setTimeout(function(){
+                    dismissMessage();
+                }, 5000);
             },
         });        
 
@@ -164,7 +236,7 @@ $(document).ready(function () {
                     
                     $(ele.target).closest('tr').remove();
                     
-                    var snoRows = $(table).find('tbody tr:not(.hide):not(#search) td.data-sno');
+                    var snoRows = $(table).find('tbody tr:not(.hide):not(#search):not(.fade) td.data-sno');
                     snoRows.each(function(i, e){
                         $(this).text(i+1);
                     })
@@ -199,50 +271,93 @@ $(document).ready(function () {
 
     });
 
+    //logout
+    $(document).on('click', ".logout-btn", function(ele) {
+        $.ajax({
+            type: "POST",
+            url: "/logout",
+            success: function (data) {
+                window.location.href = '/login';
+            },
+            error: function(err){
+                var type = "danger";   //info, success, warning, danger
+                var title = "Error";
+                var message = "Can't logout. System error!";
+                showMessage(type, title, message);
+            }
+        }); 
+    });
 
-    $('#addClient').on('show.bs.modal', function (ele) {
+    $('.modal').on('show.bs.modal', function (ele) {
         //To hide saving button
         $('#saving-btn').addClass('hide');
-        $('#save-btn').removeClass('hide');
+        $('#save-btn').removeClass('hide');        
+
+        $(ele.target).attr('data-id', $(ele.relatedTarget).closest('tr').attr('id'));
+        
+        if($(ele.relatedTarget).hasClass('edit')){
+            $(ele.target).attr('data-save-type', 'update');
+        }else{
+            $(ele.target).attr('data-save-type', 'add');
+        }
 
         var curClient = $(ele.relatedTarget).closest('tr[id]');
-        $(ele.target).find('input').each(function(i, ele){
+        $(ele.target).find('input, .dropdown .dropdown-toggle').each(function(i, ele){
             var id = $(ele).attr('id');
             var value = $(curClient).find('.data-'+id).text();
-            $(ele).val(value);
+            if(/(input)/i.test(ele.tagName)){
+                $(ele).val(value);
+            }else if(value){
+                $(ele).text(value);
+            }
         });
-
     })
 
-    $('#addClient').on('hidden.bs.modal', function (e) {
-        console.log('hidden.bs.modal');
+    $('.modal').on('hidden.bs.modal', function (ele) {
+        
     })
 
-    $('#addClient').on('hide.bs.modal', function (e) {
-        console.log('hide.bs.modal');
+    $('.modal').on('hide.bs.modal', function (ele) {
+        $(ele.target).removeAttr('data-id');
+        $(ele.target).removeAttr('data-save-type');
     })
 
-    $('#addClient').on('shown.bs.modal', function (e) {
+    $('.modal').on('shown.bs.modal', function (ele) {
         console.log('shown.bs.modal');
+    })
+
+    $('.dropdown-menu a').on('click', function(){
+        $(this).closest('.dropdown').find('.dropdown-toggle').html($(this).html());
     })
 
     function dismissMessage() {
         const notification = document.querySelector('.notification');
         notification.classList.remove('received');
+        $('.notification').addClass('hide');
     }
 
-    function showMessage(type, title, messageContent) {        
-        const notification = document.querySelector('.notification');
-        const message = document.querySelector('.notification__message');
-        $('.notification__message h1').html(title);
-        $('.notification__message p').html(messageContent);
-
-        message.className = `notification__message message--` + type;
-        notification.classList.add('received');
-        const button = document.querySelector('.notification__message button');
-        button.addEventListener('click', dismissMessage, {
-            once: true
-        });
+    function showMessage(type, title, messageContent) {
+        $('.notification').removeClass('hide');
+        if($('.notification.received').length>0){
+            dismissMessage();
+            showMessage(type, title, messageContent);
+            // setTimeout(function(){
+            //     showMessage(type, title, messageContent)
+            // }, 0)
+        }else{
+            const notification = document.querySelector('.notification');
+            // notification.classList.remove('hide');
+            const message = document.querySelector('.notification__message');
+            $('.notification__message h1').html(title);
+            $('.notification__message p').html(messageContent);
+    
+            message.className = `notification__message message--` + type;            
+            notification.classList.add('received');            
+            const button = document.querySelector('.notification__message button');
+            button.addEventListener('click', dismissMessage, {
+                once: true
+            });
+        }
     }
 
     function toggleClass(ele, className){
@@ -252,5 +367,9 @@ $(document).ready(function () {
             $(ele).addClass(className);
         }
     }
+
+    // $(function () {
+    //     $('#datetimepicker1').datetimepicker();
+    // });
 
 });
