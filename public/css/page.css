@@ -44,11 +44,11 @@ table{
     border-bottom: 1px solid #dddddd;
 }
 
-th{
+tr[id] th{
     padding-bottom: 1% !important;
 }
 
-td{
+tr[id] td{
     padding-top: 1% !important;
     padding-bottom: 1% !important;
 }
@@ -337,26 +337,26 @@ td{
     box-shadow: 0 0 40px 0 rgb(0 0 0 / 15%);
     max-width: 101%;
 }
-.table-responsive thead th { position: sticky; top: 0; z-index: 1;}
-.table-responsive tr#search { position: sticky; top: 10%; z-index: 10;}
+.table-responsive thead tr[id]>th { position: sticky; top: 0; z-index: 1;}
+.table-responsive tr[id]#search { position: sticky; top: 10%; z-index: 10;}
 
-.table td{
+.table tr[id]>td{
     font-size: 0.95em;
     color: gray;
 }
-.table th{
+.table tr[id*=heading]>th{
     padding-top: 1.3em !important;
     padding-bottom: 1.3em !important;
     font-size: 1.1em;
     color: #fff;
-    background-color: rgb(57, 57, 57);
+    background-color: rgb(32, 30, 30);
 }
 
-.table tr:nth-child(even) {
-    background-color: rgb(221, 235, 250) !important;
+.table tr[id]:nth-child(even) {
+    background-color: rgb(221, 235, 250);
 }
 
-.table tr th:nth-child(1), .table tr td:nth-child(1){
+.table tr[id]>th:nth-child(1), .table tr[id]>td:nth-child(1){
     padding-left: 1em;
 }
 
@@ -465,4 +465,17 @@ tr .badge{
 
 .count{
     font-weight: bold;
+}
+
+.data-password .glyphicon:hover{
+    cursor: pointer;
+    color: #3a3737;
+}
+
+.data-password .glyphicon{
+    padding-left: 2rem;
+}
+
+tr.overdue {
+    background-color: #ffc8c8 !important;
 }

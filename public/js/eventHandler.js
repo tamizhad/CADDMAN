@@ -153,7 +153,8 @@ $(document).ready(function () {
             "firstName": $(parentEle).find("#first-name").val(),
             "lastName": $(parentEle).find("#last-name").val(),
             "username": $(parentEle).find("#username").val(),
-            "password": $(parentEle).find("#password").val(),            
+            "password": $(parentEle).find("#password").val(),      
+            "status": "active"      
         }
 
         $.ajax({
@@ -165,19 +166,24 @@ $(document).ready(function () {
                 $('#save-btn').removeClass('hide');
 
                 if(data && data.code == 200){
-                    $('#'+curModalId).modal('hide')
+                    $('#'+curModalId+" button.close").trigger('click');
 
                     if(data.new_row){
                         var curId = $(data.new_row).attr('id');
                         if(saveType == 'add'){
-                            var rowCnt = $('.main-panel.active#'+dataType+' .table tbody tr:not(.hide):not(#search):not(.fade)').length;                                                  
+                            var rowCnt = $('.main-panel.active#'+dataType+' .table tbody tr:not(.hide):not(#search):not(.fade)').length;
                             $('.main-panel.active#'+dataType+' .table tbody').append(data.new_row);
                             $('.main-panel.active#'+dataType+' #'+curId).find('.data-sno').text((rowCnt+1));
                         }else if(saveType == 'update') {
                             $('.main-panel.active#'+dataType+' #'+curId).html($(data.new_row).html());
+                            $('.main-panel.active#'+dataType+' #'+curId).attr('class', $(data.new_row).attr('class'));
                         }
                     }          
-
+                    $(function () {
+                        $('[data-id="picker-due-date"]').datetimepicker({
+                            format: 'DD-MM-YYYY'
+                        });
+                    });
                     var type = "success";   //info, success, warning, danger
                     var title = "Success";
                     var message = (saveType == 'update')? dataType+" updated!" : dataType+" added!";
@@ -288,29 +294,65 @@ $(document).ready(function () {
         }); 
     });
 
-    $('.modal').on('show.bs.modal', function (ele) {
+    $(document).on('input', "[data-id='picker-due-date']", function(ele) {
+        alert('changed');
+    });
+
+    $(document).on('click', ".data-password .glyphicon-eye-close", function(ele) {
+        var targetEle = $(ele.target).closest('td').find('[data-value]');
+        $(targetEle).text($(targetEle).attr('data-value'));
+        $(ele.target).removeClass('glyphicon-eye-close');
+        $(ele.target).addClass('glyphicon-eye-open');
+    });
+
+    $(document).on('click', ".data-password .glyphicon-eye-open", function(ele) {
+        var targetEle = $(ele.target).closest('td').find('[data-value]');
+        $(targetEle).text('********');
+        $(ele.target).removeClass('glyphicon-eye-open');
+        $(ele.target).addClass('glyphicon-eye-close');
+    });
+
+    $(document).on('click', "[data-toggle='modal']", function(ele) {
         //To hide saving button
         $('#saving-btn').addClass('hide');
-        $('#save-btn').removeClass('hide');        
+        $('#save-btn').removeClass('hide');
 
-        $(ele.target).attr('data-id', $(ele.relatedTarget).closest('tr').attr('id'));
+        var relatedTarget = ele.target;
+        var targetEle = $('.modal'+$(relatedTarget).attr('data-target'));
+
+        $(targetEle).removeAttr('data-id');
+        $(targetEle).removeAttr('data-save-type');
+
+        $(targetEle).attr('data-id', $(relatedTarget).closest('tr').attr('id'));
         
-        if($(ele.relatedTarget).hasClass('edit')){
-            $(ele.target).attr('data-save-type', 'update');
+        if($(relatedTarget).hasClass('edit')){
+            $(targetEle).attr('data-save-type', 'update');
         }else{
-            $(ele.target).attr('data-save-type', 'add');
+            $(targetEle).attr('data-save-type', 'add');
         }
 
-        var curClient = $(ele.relatedTarget).closest('tr[id]');
-        $(ele.target).find('input, .dropdown .dropdown-toggle').each(function(i, ele){
-            var id = $(ele).attr('id');
-            var value = $(curClient).find('.data-'+id).text();
+        var curClient = $(relatedTarget).closest('tr[id]');
+        $(targetEle).find('input, .dropdown .dropdown-toggle').each(function(i, ele){
+            var id = $(ele).attr('id');            
+            if($(ele).attr('id') == 'due-date'){
+                var value = $(curClient).find('.data-'+id+' input').val();
+            }else{
+                var value = $(curClient).find('.data-'+id).text();
+            }
             if(/(input)/i.test(ele.tagName)){
-                $(ele).val(value);
+                if($(ele).attr('id') == 'password'){
+                    $(ele).val($(curClient).find('.data-'+id+' span[data-value]').attr('data-value'));
+                }else{
+                    $(ele).val(value);
+                }                
             }else if(value){
                 $(ele).text(value);
             }
         });
+    });
+
+    $('.modal').on('show.bs.modal', function (ele) {
+
     })
 
     $('.modal').on('hidden.bs.modal', function (ele) {
@@ -318,8 +360,8 @@ $(document).ready(function () {
     })
 
     $('.modal').on('hide.bs.modal', function (ele) {
-        $(ele.target).removeAttr('data-id');
-        $(ele.target).removeAttr('data-save-type');
+        // $(ele.target).removeAttr('data-id');
+        // $(ele.target).removeAttr('data-save-type');
     })
 
     $('.modal').on('shown.bs.modal', function (ele) {
