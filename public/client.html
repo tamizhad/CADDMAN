@@ -11,6 +11,10 @@
     <script src="lib3.0/bootstrap.min.js"></script>
     <link rel="stylesheet" href="lib3.0/bootstrap.min.css">
 
+    <script src ="datepicker/1.12.4_jquery.min.js"></script>
+    <script src ="datepicker/moment.min.js"></script>
+    <script src ="datepicker/bootstrap-datetimepicker.min.js"></script>
+    <link rel ="stylesheet" href ="datepicker/bootstrap-datetimepicker.min.css">
 
     <script src="js/eventHandler.js"></script>
 </head>
@@ -51,7 +55,7 @@
             </div>
             <div class="row add-div">
                 <div class="col-sm-9">
-                    <span class="count">Count: <span class="value">-</span></span>
+                    <span class="count">No of Records: <span class="value">-</span></span>
                 </div>
                 <div class="col-sm-3">
                     <span class="glyphicon glyphicon-filter filter"></span>
@@ -77,7 +81,7 @@
                             <th>State</th>
                             <th>Sales</th>
                             <th>Lead Status</th>
-                            <th>Due Date</th>
+                            <th style="min-width: 12rem;">Due Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -111,7 +115,14 @@
                             <td class="data-client-state">{{state}}</td>
                             <td class="data-client-sales">{{sales}}</td>
                             <td class="data-client-lead-status"><span class="badge {{lead_status}}">{{lead_status}}</span></td>
-                            <td class="data-due-date text-nowrap">{{due_date}}</td>
+                            <td class="data-due-date text-nowrap">
+                                <div class='input-group date' data-id='picker-due-date'>
+                                    <input type='text' class="form-control" value="{{due_date}}"/>
+                                    <span class="input-group-addon" for-id="picker-due-date">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </td>
                             <td class="data-action text-center">
                                 <span class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#addClient"></span>
                                 <span class="glyphicon glyphicon-trash delete" query-type="move-archive"></span>
@@ -128,7 +139,7 @@
             </div>
             <div class="row add-div">
                 <div class="col-sm-10">
-                    <span class="count">Count: <span class="value">-</span></span>
+                    <span class="count">No of Records: <span class="value">-</span></span>
                 </div>
                 <div class="col-sm-2">
                     <span class="glyphicon glyphicon-filter filter"></span>
@@ -155,7 +166,7 @@
                             <td class="data-first-name">{{f_name}}</td>
                             <td class="data-last-name">{{l_name}}</td>
                             <td class="data-username">{{username}}</td>
-                            <td class="data-password">{{password}}</td>
+                            <td class="data-password"><span data-value="{{password}}">********</span><span class="glyphicon glyphicon-eye-close"></span></td>
                             <td class="data-email">{{email}}</td>
                             <td class="data-role">{{role}}</td>
                             <td class="data-action" class="text-center">
@@ -289,14 +300,14 @@
                             <div class="form-group">
                                 <label for="due-date">Due date</label>
                                 <!-- <input type="text" class="form-control" id="due-date" placeholder="Due date"> -->
-                                <input type="date" id="due-date" name="birthday">
+                                <!-- <input type="date" id="due-date" name="birthday"> -->
 
-                                <div class='input-group date' id='datetimepicker1'>
-                                    <input type='text' class="form-control" />
-                                    <span class="input-group-addon">
+                                <div class='input-group date' id='picker'>
+                                <input type='text' class="form-control" id="due-date"/>
+                                <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                 </div>
+                                </span>
+                                </div>
 
                             </div>
                         </div>
@@ -320,7 +331,7 @@
         </div>
     </div>
 
-    <div id="addUser" class="modal fade" role="dialog">
+    <div id="addUser" class="modal" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg" query-type="user">
             <!-- Modal content-->
             <div class="modal-content">
@@ -407,9 +418,11 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $('#datetimepicker1').datepicker();
+            $('#picker, [data-id="picker-due-date"]').datetimepicker({
+                format: 'DD-MM-YYYY'
+            });
         });
-       </script>
+     </script>
 </body>
 
 </html>

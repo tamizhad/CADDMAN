@@ -89,6 +89,20 @@ async function convertJsonToHTML(jsonObj, dataType, selector){
 
     $('.main-panel .count .value').text(jsonObj.results.length);
 
+    //To set overdue for due-dates
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let curDate = date+"-"+month+"-"+year;
+    $('tr:not(.hide):not(.search) td.data-due-date input').each(function(i, ele){
+        if($(ele).val()<curDate){
+            $(ele).closest('tr').addClass('overdue');
+        }else{
+            $(ele).closest('tr').removeClass('overdue');
+        }
+    })
+
     if(selector){
         return $(selector).toString();
     }

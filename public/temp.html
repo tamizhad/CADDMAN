@@ -1,107 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Date Picker Example</title>
-  <!-- Include CSS for date picker -->
-  <link rel="stylesheet" href="datepicker.css">
-</head>
-<body>
-  <h1>Date Picker Example</h1>
-  <input type="text" id="datepicker" class="datepicker" placeholder="Select a date">
-  
-  <!-- Include JavaScript for date picker -->
-  <script src="datepicker.js"></script>
-  <script>
-    // Initialize Datepicker
-    const datePicker = document.getElementById('datepicker');
-    datePicker.addEventListener('focus', function() {
-      // Open the date picker on input focus
-      showDatePicker();
-    });
-    
-    function showDatePicker() {
-      const datePicker = document.getElementById('datepicker');
-      const datepickerContainer = document.createElement('div');
-      datepickerContainer.id = 'datepicker-container';
-      
-      // Create date picker HTML
-      datepickerContainer.innerHTML = `
-        <div class="datepicker-header">
-          <button id="datepicker-prev" class="datepicker-prev">&#9001;</button>
-          <div id="datepicker-title" class="datepicker-title"></div>
-          <button id="datepicker-next" class="datepicker-next">&#9002;</button>
+<html>  
+<head>  
+<title>Bootstrap date and time</title>  
+<script src ="datepicker/1.12.4_jquery.min.js"></script>  
+<script src ="datepicker/moment.min.js"></script>  
+<script src ="datepicker/bootstrap-datetimepicker.min.js"></script>  
+<link rel ="stylesheet" href ="datepicker/bootstrap-datetimepicker.min.css">  
+
+</head>  
+<body>  
+    <div class="container">
+    	<h2>Basic Date Time Picker</h2>
+        <div class='input-group date' id='picker'>
+          <input type='text' class="form-control" />
+          <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>	                 </span>
         </div>
-        <div class="datepicker-body">
-          <table>
-            <thead>
-              <tr>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-              </tr>
-            </thead>
-            <tbody id="datepicker-dates"></tbody>
-          </table>
-        </div>
-      `;
-      
-      document.body.appendChild(datepickerContainer);
-      
-      const datepickerPrev = document.getElementById('datepicker-prev');
-      const datepickerNext = document.getElementById('datepicker-next');
-      const datepickerTitle = document.getElementById('datepicker-title');
-      const datepickerDates = document.getElementById('datepicker-dates');
-      
-      // Set initial date
-      let currentDate = new Date();
-      let currentMonth = currentDate.getMonth();
-      let currentYear = currentDate.getFullYear();
-      
-      updateDatePicker();
-      
-      datepickerPrev.addEventListener('click', function() {
-        // Go to previous month
-        currentMonth--;
-        if (currentMonth < 0) {
-          currentMonth = 11;
-          currentYear--;
-        }
-        updateDatePicker();
-      });
-      
-      datepickerNext.addEventListener('click', function() {
-        // Go to next month
-        currentMonth++;
-        if (currentMonth > 11) {
-          currentMonth = 0;
-          currentYear++;
-        }
-        updateDatePicker();
-      });
-      
-      datepickerDates.addEventListener('click', function(event) {
-        // Select a date
-        const selectedDate = event.target.getAttribute('data-date');
-        if (selectedDate) {
-          datePicker.value = `${currentMonth + 1}/${selectedDate}/${currentYear}`;
-          closeDatePicker();
-        }
-      });
-      
-      function updateDatePicker() {
-        // Update date picker HTML
-        datepickerTitle.textContent = `${getMonthName(currentMonth)} ${currentYear}`;
-        datepickerDates.innerHTML = '';
-        
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-        const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
-        
-        for (let i = 1; i <= lastDay; i++) {
-          const dateElement = document.createElement('td');
-          dateElement.textContent = i;
-          dateElement.setAttribute('data-date', i);
-          if (
+    </div>
+      <script type="text/javascript">
+         $(function () {
+             $('#picker').datetimepicker();
+         });
+      </script>
+   </div>
+</div>
+          
+</body>  
+</html>  
