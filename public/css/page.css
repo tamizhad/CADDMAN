@@ -434,7 +434,7 @@ tr#search td{
 }
 
 .dropdown-div .dropdown-toggle{
-    width: 50%;
+    min-width: 50%;
     text-align: left;
 }
 
@@ -478,4 +478,26 @@ tr .badge{
 
 tr.overdue {
     background-color: #ffc8c8 !important;
+}
+
+.error input{
+    border: 1px solid red !important;
+}
+
+.error input, .error button{
+    border: 1px solid red !important;
+}
+
+.error label{
+    color: red !important;
+}
+
+.required label::after{
+    content: "*";
+    color: red;
+    font-size: 1.5rem;
+}
+
+btn:focus {
+    background-color:yellow;    
 }

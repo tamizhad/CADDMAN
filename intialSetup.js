@@ -1,47 +1,64 @@
 const mysql = require('mysql');
 const config = require("./config.js")
+const { v4: uuidv4 } = require('uuid');
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: ""
-});
+try{
+    var con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: ""
+    });
+    con.connect(function(err) {
+        if (err){
+            res.json({"code": 400, "error": "Unable to connect to database"});
+        }else{
+            console.log("\n\nMYSQL Connected!");
+            con.query("CREATE DATABASE "+config.db.dbName+";", function(error, results, fields){
+                if(error && error.sqlMessage && !error.sqlMessage.includes('database exists')){
+                    console.log(error);
+                }else{
+                    console.log("Database created");
+                    con.query("use "+config.db.dbName+";", function(error, results, fields){
+                        if(error && error.sqlMessage && !error.sqlMessage.includes('database exists')){
+                            console.log(error);
+                        }else{
+                            console.log("Database selected");
+                            con.query("CREATE table "+config.db.userList+" (row_id INT AUTO_INCREMENT primary key NOT NULL, id varchar(255) NOT NULL UNIQUE, f_name varchar(255) NOT NULL, l_name varchar(255), username varchar(255) NOT NULL UNIQUE, password varchar(255) NOT NULL, email varchar(255), role varchar(255) NOT NULL, created_time varchar(255), status varchar(255));", function(error, results, fields){
+                                if(error && error.sqlMessage && !error.sqlMessage.includes('already exists')){
+                                    console.log(error);
+                                }else{
+                                    console.log('('+config.db.userList+') -> Table created');
+                                    con.query('insert into '+config.db.userList+' values(NULL, "'+uuidv4()+'", "", "", "admin", "ZAQxsw123", "admin@test.com", "admin", "", "active");', function(error, results, fields){
+                                        console.log("\n"+error.sqlMessage);
+                                        if(error && error.sqlMessage && !error.sqlMessage.includes('Duplicate entry')){
+                                            console.log(error);
+                                        }else{
+                                            console.log('\n\nusername - admin');
+                                            console.log('password - ZAQxsw123');
+                                            console.log('email - admin@test.com\n\n');
+                                            process.exit();
+                                        }
+                                    });
+                                }
+                            });
 
-con.connect(function(err) {
-    if (err){
-        res.json({"code": 400, "error": "Unable to connect to database"});
-    }else{
-        console.log("Connected!");
-        con.query("CREATE DATABASE "+config.db.dbName+";", function(error, results, fields){
-            if(error && error.sqlMessage && !error.sqlMessage.includes('database exists')){
-                console.log(error);
-            }else{
-                con.query("use "+config.db.dbName+";", function(error, results, fields){
-                    if(error && error.sqlMessage && !error.sqlMessage.includes('database exists')){
-                        console.log(error);
-                    }else{
-                        con.query("CREATE table "+config.db.userList+" (row_id int NOT NULL AUTO_INCREMENT, id varchar(255) NOT NULL UNIQUE, f_name varchar(255) NOT NULL, l_name varchar(255), username varchar(255) NOT NULL UNIQUE, password NOT NULL varchar(255), email varchar(255), role NOT NULL varchar(255), created_time varchar(255));", function(error, results, fields){
-                            if(error && error.sqlMessage && !error.sqlMessage.includes('already exists')){
-                                console.log(error);
-                            }else{
-                                console.log('('+config.db.dbName+' -> '+config.db.userList+') Database and Table created');
-                                con.query('insert into '+config.db.userList+' values("", "", "admin", "ZAQxsw123", "admin@test.com", "admin");', function(error, results, fields){
-                                    if(error && error.sqlMessage && !error.sqlMessage.includes('already exists')){
-                                        console.log(error);
-                                    }else{
-                                        console.log('\n\nusername - admin');
-                                        console.log('password - ZAQxsw123');
-                                        console.log('email - admin@test.com');
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-});
+                            con.query("CREATE table "+config.db.clientList+" (row_id INT AUTO_INCREMENT primary key NOT NULL, id varchar(255) NOT NULL UNIQUE, client_id varchar(255) NOT NULL UNIQUE, client_name varchar(255) NOT NULL, contact_person varchar(255), role varchar(255) NOT NULL, contact_no varchar(255), email varchar(255), website_link varchar(255), address varchar(255), state varchar(255), sales varchar(255), lead_status varchar(255), due_date varchar(255), created_time varchar(255), status varchar(255));", function(error, results, fields){
+                                if(error && error.sqlMessage && !error.sqlMessage.includes('already exists')){
+                                    console.log(error);
+                                }else{
+                                    console.log('('+config.db.clientList+') -> Table created');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+}catch(err){
+
+}
+
 
 // 
 

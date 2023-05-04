@@ -1,43 +1,49 @@
 $(document).ready(function () {
 
+    function validateBeforLogin(){        
+        if($('#login #username').val() == "" || $('#login #username').val().trim() == "" || $('#login #password').val() == "" || $('#login #password').val().trim() == ""){
+            return false;
+        }
+        return true;
+    }
+
 
     $('#login-btn').on('click', function () {
+        if(validateBeforLogin()){
+            var params = {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            }
 
-        // var type = "danger";   //info, success, warning, danger
-        // var title = "Error";
-        // var message = "msg<br/>Content";
-        // showMessage(type, title, message);
-
-        var params = {
-            "username": $("#username").val(),
-            "password": $("#password").val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/authenticate",
-            data: params,
-            success: function (data) {
-                if(data && data.code == 200){
-                    location.href = '/home';
-                }else if(data && data.code == 400){
-                    $('.error').removeClass('hide');
-                }else{
+            $.ajax({
+                type: "POST",
+                url: "/authenticate",
+                data: params,
+                success: function (data) {
+                    if(data && data.code == 200){
+                        location.href = '/home';
+                    }else if(data && data.code == 400){
+                        $('.error').removeClass('hide');
+                    }else{
+                        var type = "danger";   //info, success, warning, danger
+                        var title = "Login error";
+                        var message = "Internal problem";
+                        showMessage(type, title, message);
+                    }
+                },
+                error: function (data) {
                     var type = "danger";   //info, success, warning, danger
                     var title = "Login error";
                     var message = "Internal problem";
                     showMessage(type, title, message);
-                }
-            },
-            error: function (data) {
-                var type = "danger";   //info, success, warning, danger
-                var title = "Login error";
-                var message = "Internal problem";
-                showMessage(type, title, message);
-            },
-        });
-
-
+                },
+            });
+        }else{
+            var type = "danger";   //info, success, warning, danger
+            var title = "Error";
+            var message = "Username or Password can't be empty";
+            showMessage(type, title, message);
+        }
     });
 
     $(document).on({
@@ -126,80 +132,110 @@ $(document).ready(function () {
           });
     });
 
+
+    function validateBeforSave(ele){
+        $(ele.target).closest('.modal').find('.required input').each(function(index, inputEle){
+            if($(inputEle).val() == "" || $(inputEle).val().trim() == ""){
+                $(inputEle).closest('.required').addClass('error');
+            }
+        })
+
+        $(ele.target).closest('.modal').find('.required .dropdown button').each(function(index, inputEle){
+            if($(inputEle).text() == "" || $(inputEle).val().trim() == "" || $(inputEle).val().trim() == "---"){
+                $(inputEle).closest('.required').addClass('error');
+            }
+        })
+
+        return false;
+    }
+
     $(document).on('click', "#save-btn", function(ele) {
-        var curModalId = $(ele.target).closest('.modal').attr('id');
-        var parentEle = $(ele.target).closest('.modal-dialog');
-        var saveType = $(ele.target).closest('.modal').attr('data-save-type');
-        var dataType = $(parentEle).attr("query-type");
-
-        $('#saving-btn').removeClass('hide');
-        $('#save-btn').addClass('hide');
-        var params = {
-            "curRowId": $(ele.target).closest('.modal').attr('data-id'),            
-            "queryType": saveType+"-"+dataType,
-            "dataType": dataType,
-            "clientName": $(parentEle).find("#client-name").val(),
-            "clientContactPerson": $(parentEle).find("#client-contact-person").val(),
-            "role": $(parentEle).find("#role").text(),
-            "clientContactNo": $(parentEle).find("#contact-no").val(),
-            "email": $(parentEle).find("#email").val(),
-            "clientWebsite": $(parentEle).find("#client-website").val(),
-            "clientAddress": $(parentEle).find("#client-address").val(),
-            "clientState": $(parentEle).find("#client-state").val(),
-            "clientLeadStatus": $(parentEle).find("#client-lead-status").text(),
-            "dueDate": $(parentEle).find("#due-date").val(),
-            "clientSales": $(parentEle).find("#client-sales").text(),
-
-            "firstName": $(parentEle).find("#first-name").val(),
-            "lastName": $(parentEle).find("#last-name").val(),
-            "username": $(parentEle).find("#username").val(),
-            "password": $(parentEle).find("#password").val(),      
-            "status": "active"      
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/update-db",
-            data: params,
-            success: function (data) {
-                $('#saving-btn').addClass('hide');
-                $('#save-btn').removeClass('hide');
-
-                if(data && data.code == 200){
-                    $('#'+curModalId+" button.close").trigger('click');
-
-                    if(data.new_row){
-                        var curId = $(data.new_row).attr('id');
-                        if(saveType == 'add'){
-                            var rowCnt = $('.main-panel.active#'+dataType+' .table tbody tr:not(.hide):not(#search):not(.fade)').length;
-                            $('.main-panel.active#'+dataType+' .table tbody').append(data.new_row);
-                            $('.main-panel.active#'+dataType+' #'+curId).find('.data-sno').text((rowCnt+1));
-                        }else if(saveType == 'update') {
-                            $('.main-panel.active#'+dataType+' #'+curId).html($(data.new_row).html());
-                            $('.main-panel.active#'+dataType+' #'+curId).attr('class', $(data.new_row).attr('class'));
-                        }
-                    }          
-                    $(function () {
-                        $('[data-id="picker-due-date"]').datetimepicker({
-                            format: 'DD-MM-YYYY'
+        if(validateBeforSave(ele)){
+            var curModalId = $(ele.target).closest('.modal').attr('id');
+            var parentEle = $(ele.target).closest('.modal-dialog');
+            var saveType = $(ele.target).closest('.modal').attr('data-save-type');
+            var dataType = $(parentEle).attr("query-type");
+    
+            $('#saving-btn').removeClass('hide');
+            $('#save-btn').addClass('hide');
+            var params = {
+                "curRowId": $(ele.target).closest('.modal').attr('data-id'),            
+                "queryType": saveType+"-"+dataType,
+                "dataType": dataType,
+                "clientName": $(parentEle).find("#client-name").val(),
+                "clientContactPerson": $(parentEle).find("#client-contact-person").val(),
+                "role": $(parentEle).find("#role").text(),
+                "clientContactNo": $(parentEle).find("#contact-no").val(),
+                "email": $(parentEle).find("#email").val(),
+                "clientWebsite": $(parentEle).find("#client-website").val(),
+                "clientAddress": $(parentEle).find("#client-address").val(),
+                "clientState": $(parentEle).find("#client-state").val(),
+                "clientLeadStatus": $(parentEle).find("#client-lead-status").text(),
+                "dueDate": $(parentEle).find("#due-date").val(),
+                "clientSales": $(parentEle).find("#client-sales").text(),
+    
+                "firstName": $(parentEle).find("#first-name").val(),
+                "lastName": $(parentEle).find("#last-name").val(),
+                "username": $(parentEle).find("#username").val(),
+                "password": $(parentEle).find("#password").val(),      
+                "status": "active"      
+            }
+    
+            $.ajax({
+                type: "POST",
+                url: "/update-db",
+                data: params,
+                success: function (data) {
+                    $('#saving-btn').addClass('hide');
+                    $('#save-btn').removeClass('hide');
+    
+                    if(data && data.code == 200){
+                        $('#'+curModalId+" button.close").trigger('click');
+    
+                        if(data.new_row){
+                            var curId = $(data.new_row).attr('id');
+                            if(saveType == 'add'){
+                                var rowCnt = $('.main-panel.active#'+dataType+' .table tbody tr:not(.hide):not(#search):not(.fade)').length;
+                                $('.main-panel.active#'+dataType+' .table tbody').append(data.new_row);
+                                $('.main-panel.active#'+dataType+' #'+curId).find('.data-sno').text((rowCnt+1));
+                            }else if(saveType == 'update') {
+                                $('.main-panel.active#'+dataType+' #'+curId).html($(data.new_row).html());
+                                $('.main-panel.active#'+dataType+' #'+curId).attr('class', $(data.new_row).attr('class'));
+                            }
+                        }          
+                        $(function () {
+                            $('[data-id="picker-due-date"]').datetimepicker({
+                                format: 'DD-MM-YYYY'
+                            });
                         });
-                    });
-                    var type = "success";   //info, success, warning, danger
-                    var title = "Success";
-                    var message = (saveType == 'update')? dataType+" updated!" : dataType+" added!";
-                    showMessage(type, title, message);
-                    setTimeout(function(){
-                        dismissMessage();
-                    }, 5000);
-                }else if(data && data.code == 400 && /(duplicate username)/.test(data.message)){
-                    var type = "danger";   //info, success, warning, danger
-                    var title = "Error";
-                    var message = "Username already exist!";
-                    showMessage(type, title, message);
-                    setTimeout(function(){
-                        dismissMessage();
-                    }, 5000);
-                }else{
+                        var type = "success";   //info, success, warning, danger
+                        var title = "Success";
+                        var message = (saveType == 'update')? dataType+" updated!" : dataType+" added!";
+                        showMessage(type, title, message);
+                        setTimeout(function(){
+                            dismissMessage();
+                        }, 5000);
+                    }else if(data && data.code == 400 && /(duplicate username)/.test(data.message)){
+                        var type = "danger";   //info, success, warning, danger
+                        var title = "Error";
+                        var message = "Username already exist!";
+                        showMessage(type, title, message);
+                        setTimeout(function(){
+                            dismissMessage();
+                        }, 5000);
+                    }else{
+                        var type = "danger";   //info, success, warning, danger
+                        var title = "Error";
+                        var message = "Can't "+saveType+" "+dataType+"!";
+                        showMessage(type, title, message);
+                        setTimeout(function(){
+                            dismissMessage();
+                        }, 5000);
+                    }
+                },
+                error: function (data) {
+                    $('#saving-btn').addClass('hide');
+                    $('#save-btn').removeClass('hide');
                     var type = "danger";   //info, success, warning, danger
                     var title = "Error";
                     var message = "Can't "+saveType+" "+dataType+"!";
@@ -207,21 +243,17 @@ $(document).ready(function () {
                     setTimeout(function(){
                         dismissMessage();
                     }, 5000);
-                }
-            },
-            error: function (data) {
-                $('#saving-btn').addClass('hide');
-                $('#save-btn').removeClass('hide');
-                var type = "danger";   //info, success, warning, danger
-                var title = "Error";
-                var message = "Can't "+saveType+" "+dataType+"!";
-                showMessage(type, title, message);
-                setTimeout(function(){
-                    dismissMessage();
-                }, 5000);
-            },
-        });        
-
+                },
+            });
+        }else{
+            var type = "danger";   //info, success, warning, danger
+            var title = "Error";
+            var message = "Mandatory field can't be empty";
+            showMessage(type, title, message);
+            setTimeout(function(){
+                dismissMessage();
+            }, 5000);
+        }
     });
 
     //To delete current row
@@ -315,11 +347,12 @@ $(document).ready(function () {
     $(document).on('click', "[data-toggle='modal']", function(ele) {
         //To hide saving button
         $('#saving-btn').addClass('hide');
-        $('#save-btn').removeClass('hide');
+        $('#save-btn').removeClass('hide');        
 
         var relatedTarget = ele.target;
         var targetEle = $('.modal'+$(relatedTarget).attr('data-target'));
 
+        $(targetEle).find('.error').removeClass('error');
         $(targetEle).removeAttr('data-id');
         $(targetEle).removeAttr('data-save-type');
 
@@ -336,6 +369,8 @@ $(document).ready(function () {
             var id = $(ele).attr('id');            
             if($(ele).attr('id') == 'due-date'){
                 var value = $(curClient).find('.data-'+id+' input').val();
+            }if(/(button)/i.test(ele.tagName) && $(curClient).find('.data-'+id+' button').length>0){
+                var value = $(curClient).find('.data-'+id+' button').text();
             }else{
                 var value = $(curClient).find('.data-'+id).text();
             }

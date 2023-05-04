@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Client List</title>
+    <title>CADMANN ENGG</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/page.css">
@@ -113,7 +113,17 @@
                             <td class="data-client-website">{{website_link}}</td>
                             <td class="data-client-address">{{address}}</td>
                             <td class="data-client-state">{{state}}</td>
-                            <td class="data-client-sales">{{sales}}</td>
+                            <td class="data-client-sales">
+                                <div class="form-group dropdown-div">
+                                    <!-- <label for="client-sales"></label> -->
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" id="client-sales" type="button" data-toggle="dropdown">{{sales}}</button>
+                                        <ul class="dropdown-menu">
+                                          <li><a href="#" value="default">---</a></li>
+                                        </ul>
+                                      </div>
+                                </div>                                
+                            </td>
                             <td class="data-client-lead-status"><span class="badge {{lead_status}}">{{lead_status}}</span></td>
                             <td class="data-due-date text-nowrap">
                                 <div class='input-group date' data-id='picker-due-date'>
@@ -161,6 +171,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr id="search" style="display: none;">
+                            <td class="data-sno"><input type="text" class="form-control data-sno" placeholder="search"/></td>
+                            <td class="data-first-name"><input type="text" class="form-control data-first-name" placeholder="First name"/></td>
+                            <td class="data-last-name"><input type="text" class="form-control data-last-name" placeholder="Last name"></td>
+                            <td class="data-username"><input type="text" class="form-control data-username" placeholder="Username"></td>
+                            <td class="data-password"><input type="text" class="form-control data-password" disabled placeholder=""></td>
+                            <td class="data-email"><input type="text" class="form-control data-email" placeholder="Email"></td>
+                            <td class="data-role"><input type="text" class="form-control data-role" placeholder="Role"></td>
+                            <td class="data-clear"><button type="button" class="btn clear-btn">Clear X</button></td>
+                        </tr>
                         <tr class="hide" id="user-list-template">
                             <td class="data-sno">{{sno}}</td>
                             <td class="data-first-name">{{f_name}}</td>
@@ -192,13 +212,13 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-name">Client name</label>
                                 <input type="text" class="form-control" id="client-name" placeholder="Client name">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-contact-person">Client contact person</label>
                                 <input type="text" class="form-control" id="client-contact-person"
                                     placeholder="Contact person">
@@ -208,7 +228,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group dropdown-div">
+                            <div class="form-group dropdown-div required">
                                 <label for="role">Role</label>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" id="role" type="button" data-toggle="dropdown">---</button>
@@ -222,7 +242,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="contact-no">Contact no</label>
                                 <input type="text" class="form-control" id="contact-no" placeholder="Contact no">
                             </div>
@@ -231,13 +251,13 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" id="email" placeholder="Email">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-website">Website</label>
                                 <input type="text" class="form-control" id="client-website" placeholder="Website">
                             </div>
@@ -246,13 +266,13 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-address">Client address</label>
                                 <input type="text" class="form-control" id="client-address" placeholder="Address">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-state">State</label>
                                 <input type="text" class="form-control" id="client-state" placeholder="State">
                             </div>
@@ -262,13 +282,12 @@
                     <div class="row">
                         <div class="col-sm-6">
 
-                            <div class="form-group dropdown-div">
+                            <div class="form-group dropdown-div required">
                                 <label for="client-sales">Sales</label>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" id="client-sales" type="button" data-toggle="dropdown">---</button>
                                     <ul class="dropdown-menu">
                                       <li><a href="#" value="default">---</a></li>
-                                      <li><a href="#">staff</a></li>
                                     </ul>
                                   </div>
                             </div>
@@ -277,7 +296,7 @@
 
                         <div class="col-sm-6">
 
-                            <div class="form-group dropdown-div">
+                            <div class="form-group dropdown-div required">
                                 <label for="client-lead-status">Lead status</label>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" id="client-lead-status" type="button" data-toggle="dropdown">---</button>
@@ -297,7 +316,7 @@
                     <div class="row">
                                                 
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="due-date">Due date</label>
                                 <!-- <input type="text" class="form-control" id="due-date" placeholder="Due date"> -->
                                 <!-- <input type="date" id="due-date" name="birthday"> -->
@@ -313,7 +332,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="client-sales">Client sales</label>
                                 <input type="text" class="form-control" id="client-sales" placeholder="Client sales">
                             </div>
@@ -342,7 +361,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="first-name">First name</label>
                                 <input type="text" class="form-control" id="first-name" placeholder="First name">
                             </div>
@@ -357,13 +376,13 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" placeholder="Username">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="password">Password</label>
                                 <input type="text" class="form-control" id="password" placeholder="Password">
                             </div>
@@ -378,7 +397,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group dropdown-div">
+                            <div class="form-group dropdown-div required">
                                 <label for="role">Role</label>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" id="role" type="button" data-toggle="dropdown">---</button>

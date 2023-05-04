@@ -19,18 +19,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-  
-// function authentication(req, res){
-//     try{
-//         if(!req.session.isAutheticated){
-//             res.writeHead(302, {'Location': 'login'});
-//             res.end();
-//         }
-//     }catch(err){
-//         console.log(err);
-//         res.sendFile(path.join(__dirname, 'public/internal-error.html'));
-//     }
-// }
+
+var staffList;
 
 var con = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -73,9 +63,20 @@ app.post('/logout', (req, res) => {
 
 async function convertJsonToHTML(jsonObj, dataType, selector){
     var html = fs.readFileSync(path.join(__dirname, 'public/client.html'));
-    const $ = cheerio.load(html);
+    var $ = cheerio.load(html);
     var cnt = 1;
     
+    //To get staff list
+    if( (selector && /{{sales}}/.test($(selector).toString())) || /{{sales}}/.test($.html())){
+        if(staffList){
+            $ = await updateTemplateForStaffList($, staffList);
+        }else{
+            var query = await getQuery('', '', 'get-staff', 'user');
+            staffList = await executeQuery(query);
+            $ = await updateTemplateForStaffList($, staffList);
+        }
+    }
+
     for(var i =0 ;i<jsonObj.results.length;i++){
         var template = $('.main-panel#'+dataType+' #'+dataType+'-list-template').toString();
         for(var key in jsonObj.results[i]){
@@ -102,11 +103,18 @@ async function convertJsonToHTML(jsonObj, dataType, selector){
             $(ele).closest('tr').removeClass('overdue');
         }
     })
-
     if(selector){
         return $(selector).toString();
     }
     return $.html();
+}
+
+async function updateTemplateForStaffList($, jsonObj){
+    for(var i =0 ;i<jsonObj.results.length;i++){
+        var name = jsonObj.results[i].f_name+" "+jsonObj.results[i].l_name;
+        $('.main-panel [id*=list-template] .data-client-sales .dropdown-menu,.modal-body #client-sales .dropdown-menu').append('<li><a href="#" username="'+jsonObj.results[i].username+'" id="'+jsonObj.results[i].id+'">'+name.replace(/^\s|\s$/g,'')+'</a></li>');
+    }
+    return $;
 }
 
 app.get('/home', async function(req, res){
@@ -187,7 +195,7 @@ app.post('/update-db', async function(req, res){
                 if(/{{\w+}}/.test(query)){
                     res.json({"code": 400, "error": "value not replace properly"}).end();
                     return;
-                }            
+                }  
                 resultObj = await executeQuery(query);
                 html = await convertJsonToHTML(resultObj, req.body.dataType, '.main-panel#'+req.body.dataType+' .table tr#'+id);
             }
@@ -238,8 +246,10 @@ app.post('/authenticate', async function(req, res){
 async function getQuery(req, res, queryType, dataType, id){
         id = id?id: uuidv4();
         var query = config.db.query[queryType];
-        for(var key in req.body){
-            query = query.replace('{{'+key+'}}', req.body[key]);
+        if(req && req.body){
+            for(var key in req.body){
+                query = query.replace('{{'+key+'}}', req.body[key]);
+            }
         }
 
         if(dataType){
@@ -298,5 +308,5 @@ async function executeQuery(queryStr){
 }
 
 app.listen(port, () => {
-  console.log(`Example app listening on http://localhost:${port}`);
+  console.log(`\n\nExample app listening on http://localhost:${port}\n`);
 })

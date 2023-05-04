@@ -6,6 +6,7 @@ const config = {
         query: {
             'add-client': 'INSERT INTO {{table}} VALUES(NULL, "{{id}}", "{{clientName}}", "{{clientContactPerson}}", "{{role}}", "{{clientContactNo}}", "{{email}}", "{{clientWebsite}}", "{{clientAddress}}", "{{clientState}}", "{{clientSales}}", "{{clientLeadStatus}}", "{{dueDate}}", "{{createdTime}}", "{{clientId}}", "active");',
             'update-client': 'UPDATE {{table}} SET client_name = "{{clientName}}", contact_person = "{{clientContactPerson}}", role = "{{role}}", contact_no = "{{clientContactNo}}", email = "{{email}}", website_link = "{{clientWebsite}}", address = "{{clientAddress}}", state = "{{clientState}}", sales = "{{clientSales}}", lead_status = "{{clientLeadStatus}}", due_date = "{{dueDate}}", status="{{status}}" WHERE id="{{curRowId}}";',
+            'get-staff' : 'SELECT * FROM {{tableName}} WHERE role = "staff";',
 
             'add-user': 'INSERT INTO {{table}} VALUES(NULL, "{{id}}", "{{firstName}}", "{{lastName}}", "{{username}}", "{{password}}", "{{email}}", "{{role}}", "{{createdTime}}", "active");',
             'get-user' : 'SELECT * FROM {{table}} WHERE username = "{{username}}";',
